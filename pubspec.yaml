@@ -28,7 +28,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  toast: ^0.1.3
 
 
 
