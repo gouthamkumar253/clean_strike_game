@@ -170,12 +170,7 @@ class Game {
     return false;
   }
 
-  bool isGameOver() {
-    if (_blackCoins == 0 && _redCoin == 0)
-      return true;
-    else
-      return false;
-  }
+
 
   int didWin() {
     final bool endGame = _blackCoins == 0 && _redCoin == 0;
