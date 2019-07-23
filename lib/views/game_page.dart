@@ -1,5 +1,4 @@
-import 'package:clean_strike/models/game.dart';
-import 'package:clean_strike/models/player.dart';
+import 'package:clean_strike/models/new_game.dart';
 import 'package:clean_strike/views/game_over.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
@@ -14,13 +13,14 @@ class CleanStrike extends StatefulWidget {
 }
 
 class _CleanStrikeState extends State<CleanStrike> {
-  int play1 = 1;
+  int currentPlayer = 1;
   int winner;
+//  bool idlePlayer;
+//  bool foulPlayer;
+//
+  bool gameOver = false;
+  bool actionSuccess = false;
   Game gameObject = Game();
-  Player player1 = Player();
-  Player player2 = Player();
-  bool gameOver = true;
-  bool operationSuccess = false;
 
   void showToast(String toastMessage) {
     Toast.show(
@@ -34,17 +34,12 @@ class _CleanStrikeState extends State<CleanStrike> {
     );
   }
 
-  void setPlayer(int winner) {
+  void losePoint(){}
+
+  void predictWinner(int winner) {
     print(winner);
-    if (!gameOver && winner < 0)
-      switch (play1) {
-        case 1:
-          play1 += 1;
-          break;
-        case 2:
-          play1 = 1;
-          break;
-      }
+    if (gameOver == false && winner < 0)
+      null;
     else {
       Navigator.of(context).push(
         PageRouteBuilder<Widget>(
@@ -88,7 +83,7 @@ class _CleanStrikeState extends State<CleanStrike> {
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        'Clean Strike!!',
+                        'Let\'s Play!!!',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.blue,
@@ -181,7 +176,7 @@ class _CleanStrikeState extends State<CleanStrike> {
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                player1.getScore().toString(),
+                                gameObject.getPlayerScore(1).toString(),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 50,
@@ -217,7 +212,7 @@ class _CleanStrikeState extends State<CleanStrike> {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              player2.getScore().toString(),
+                              gameObject.getPlayerScore(2).toString(),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 50,
@@ -246,19 +241,19 @@ class _CleanStrikeState extends State<CleanStrike> {
                               onPressed: () {
                                 setState(
                                   () {
-                                    operationSuccess = gameObject.strike(
-                                        player1, player2, play1);
-                                    if (operationSuccess)
+                                    currentPlayer =
+                                        gameObject.getCurrentPlayer();
+                                    actionSuccess = gameObject.actions(1);
+                                    if (actionSuccess)
                                       showToast(
-                                          'Player $play1 pockets a black coin');
+                                          'Player $currentPlayer pockets a black coin');
                                     else
                                       showToast(
                                           'Invalid Move.No more black coins');
 
                                     gameOver = gameObject.isGameOver();
-                                    winner =
-                                        gameObject.didWin(player1, player2);
-                                    setPlayer(winner);
+                                    winner = gameObject.didWin();
+                                    predictWinner(winner);
                                   },
                                 );
                               },
@@ -285,19 +280,20 @@ class _CleanStrikeState extends State<CleanStrike> {
                                 onPressed: () {
                                   setState(
                                     () {
-                                      operationSuccess = gameObject.multiStrike(
-                                          player1, player2, play1);
-                                      if (operationSuccess)
+                                      currentPlayer =
+                                          gameObject.getCurrentPlayer();
+
+                                      actionSuccess = gameObject.actions(2);
+                                      if (actionSuccess)
                                         showToast(
-                                            'Player $play1 pockets 2 black coins');
+                                            'Player $currentPlayer pockets 2 black coins');
                                       else
                                         showToast(
                                             'Invalid Move.No sufficient black boins');
                                       gameOver = gameObject.isGameOver();
 
-                                      winner =
-                                          gameObject.didWin(player1, player2);
-                                      setPlayer(winner);
+                                      winner = gameObject.didWin();
+                                      predictWinner(winner);
                                     },
                                   );
                                 },
@@ -325,19 +321,20 @@ class _CleanStrikeState extends State<CleanStrike> {
                                 onPressed: () {
                                   setState(
                                     () {
-                                      operationSuccess = gameObject.redStrike(
-                                          player1, player2, play1);
-                                      if (operationSuccess)
+                                      currentPlayer =
+                                          gameObject.getCurrentPlayer();
+
+                                      actionSuccess = gameObject.actions(3);
+                                      if (actionSuccess)
                                         showToast(
-                                            'Player $play1 pockets a red coin');
+                                            'Player $currentPlayer pockets a red coin');
                                       else
                                         showToast(
                                             'Invalid Move.No more red coins');
                                       gameOver = gameObject.isGameOver();
 
-                                      winner =
-                                          gameObject.didWin(player1, player2);
-                                      setPlayer(winner);
+                                      winner = gameObject.didWin();
+                                      predictWinner(winner);
                                     },
                                   );
                                 },
@@ -373,12 +370,14 @@ class _CleanStrikeState extends State<CleanStrike> {
                                 onPressed: () {
                                   setState(
                                     () {
-                                      gameObject.strikerStrike(
-                                          player1, player2, play1);
+                                      currentPlayer =
+                                          gameObject.getCurrentPlayer();
+
+                                      gameObject.actions(4);
                                       showToast(
-                                          'Player $play1 pockets the striker');
-                                      gameOver=false;
-                                      setPlayer(-1);
+                                          'Player $currentPlayer pockets the striker');
+                                      gameOver = false;
+                                      predictWinner(-1);
                                     },
                                   );
                                 },
@@ -406,13 +405,18 @@ class _CleanStrikeState extends State<CleanStrike> {
                                 onPressed: () {
                                   setState(
                                     () {
-                                      gameObject.defunctCoin(
-                                          player1, player2, play1);
-                                      gameOver=false;
+                                      currentPlayer =
+                                          gameObject.getCurrentPlayer();
 
-                                      showToast(
-                                          'Player $play1 throws the coin out of the board');
-                                      setPlayer(-1);
+                                      actionSuccess = gameObject.actions(5);
+                                      gameOver = false;
+                                      if (actionSuccess)
+                                        showToast(
+                                            'Player $currentPlayer throws the coin out of the board');
+                                      else
+                                        showToast(
+                                            'Invalid action.No sufficient coins');
+                                      predictWinner(-1);
                                     },
                                   );
                                 },
@@ -440,9 +444,14 @@ class _CleanStrikeState extends State<CleanStrike> {
                                 onPressed: () {
                                   setState(
                                     () {
-                                      setPlayer(-1);
-                                      gameOver=false;
-                                      showToast('Player $play1 makes a pass');
+                                      currentPlayer =
+                                          gameObject.getCurrentPlayer();
+
+                                      gameObject.actions(6);
+                                      predictWinner(-1);
+                                      gameOver = false;
+                                      showToast(
+                                          'Player $currentPlayer makes a pass');
                                     },
                                   );
                                 },
@@ -480,7 +489,7 @@ class _CleanStrikeState extends State<CleanStrike> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
-                        'Player $play1\'s Turn',
+                        'Player $currentPlayer\'s Turn',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,

@@ -1,7 +1,15 @@
 class Player {
-  int _score = 0;
-  bool _isFoul = false;
-  int _foulCount = 0;
+  Player() {
+    _score = 0;
+    _idleCount = 0;
+    _foulCount = 0;
+  }
+
+  int _score;
+
+  int _foulCount;
+
+  int _idleCount;
 
   int getScore() {
     return _score;
@@ -11,17 +19,19 @@ class Player {
     return _foulCount;
   }
 
-  bool getIsFoul() {
-    return _isFoul;
+  int getIdleCount() {
+    return _idleCount;
   }
 
-  void setScore(int score){
-    _score=score;
+  void setScore(int score) {
+    _score = score;
   }
-  void setFoulCount(int fouls){
-    _foulCount=fouls;
+
+  void setFoulCount(int fouls) {
+    _foulCount = fouls;
   }
-  void setIsFoul(bool isFoul){
-    _isFoul=isFoul;
+
+  void setIdleCount(int idleCount) {
+    _idleCount = idleCount;
   }
 }

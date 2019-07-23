@@ -22,14 +22,14 @@ class Game {
           {
             _score = player1.getScore();
             player1.setScore(_score + 1);
-            player1.getIsFoul() ? player1.setIsFoul(false) : null;
+//            player1.getIsFoul() ? player1.setIsFoul(false) : null;
             return true;
           }
         case 2:
           {
             _score = player2.getScore();
             player2.setScore(_score + 1);
-            player2.getIsFoul() ? player2.setIsFoul(false) : null;
+//            player2.getIsFoul() ? player2.setIsFoul(false) : null;
             return true;
           }
       }
@@ -45,14 +45,33 @@ class Game {
           {
             _score = player1.getScore();
             player1.setScore(_score + 2);
-            player1.getIsFoul() ? player1.setIsFoul(false) : null;
+//            player1.getIsFoul() ? player1.setIsFoul(false) : null;
             return true;
           }
         case 2:
           {
             _score = player2.getScore();
             player2.setScore(_score + 2);
-            player2.getIsFoul() ? player2.setIsFoul(false) : null;
+//            player2.getIsFoul() ? player2.setIsFoul(false) : null;
+            return true;
+          }
+      }
+    } else if (_blackCoins == 1 && _redCoin == 1) {
+      _blackCoins = 0;
+      _redCoin = 0;
+      switch (playerTurn) {
+        case 1:
+          {
+            _score = player1.getScore();
+            player1.setScore(_score + 4);
+//            player1.getIsFoul() ? player1.setIsFoul(false) : null;
+            return true;
+          }
+        case 2:
+          {
+            _score = player2.getScore();
+            player2.setScore(_score + 4);
+//            player2.getIsFoul() ? player2.setIsFoul(false) : null;
             return true;
           }
       }
@@ -68,14 +87,14 @@ class Game {
           {
             _score = player1.getScore();
             player1.setScore(_score + 3);
-            player1.getIsFoul() ? player1.setIsFoul(false) : null;
+//            player1.getIsFoul() ? player1.setIsFoul(false) : null;
             return true;
           }
         case 2:
           {
             _score = player2.getScore();
-            player2.setScore(_score + 2);
-            player2.getIsFoul() ? player2.setIsFoul(false) : null;
+            player2.setScore(_score + 3);
+//            player2.getIsFoul() ? player2.setIsFoul(false) : null;
             return true;
           }
       }
@@ -89,9 +108,9 @@ class Game {
         {
           _score = player1.getScore();
           player1.setScore(_score - 1);
-          if (!player1.getIsFoul()) {
-            player1.setIsFoul(true);
-          }
+//          if (!player1.getIsFoul()) {
+//            player1.setIsFoul(true);
+//          }
           int foulCount = player1.getFoulCount();
           player1.setFoulCount(foulCount++);
           break;
@@ -100,9 +119,9 @@ class Game {
         {
           _score = player2.getScore();
           player2.setScore(_score - 1);
-          if (!player2.getIsFoul()) {
-            player2.setIsFoul(true);
-          }
+//          if (!player2.getIsFoul()) {
+//            player2.setIsFoul(true);
+//          }
           int foulCount = player2.getFoulCount();
           player2.setFoulCount(foulCount++);
           break;
@@ -110,32 +129,61 @@ class Game {
     }
   }
 
-  void defunctCoin(Player player1, Player player2, int playerTurn) {
-    switch (playerTurn) {
-      case 1:
-        {
-          _score = player1.getScore();
-          player1.setScore(_score - 2);
-          _blackCoins -= 2;
-          if (!player1.getIsFoul()) {
-            player1.setIsFoul(true);
+  bool defunctCoin(Player player1, Player player2, int playerTurn) {
+    if (_blackCoins > 0) {
+      _blackCoins -= 1;
+      switch (playerTurn) {
+        case 1:
+          {
+            _score = player1.getScore();
+            player1.setScore(_score - 2);
+//            if (!player1.getIsFoul()) {
+//              player1.setIsFoul(true);
+//            }
+            int foulCount = player1.getFoulCount();
+            player1.setFoulCount(foulCount++);
+            return true;
           }
-          int foulCount = player1.getFoulCount();
-          player1.setFoulCount(foulCount++);
-          break;
-        }
-      case 2:
-        {
-          _score = player2.getScore();
-          player2.setScore(_score - 2);
-          if (!player2.getIsFoul()) {
-            player2.setIsFoul(true);
+        case 2:
+          {
+            _score = player2.getScore();
+            player2.setScore(_score - 2);
+//            if (!player2.getIsFoul()) {
+//              player2.setIsFoul(true);
+//            }
+            int foulCount = player2.getFoulCount();
+            player2.setFoulCount(foulCount++);
+            return true;
           }
-          int foulCount = player2.getFoulCount();
-          player2.setFoulCount(foulCount++);
-          break;
-        }
+      }
+    } else if (_redCoin == 1) {
+      _redCoin = 0;
+      switch (playerTurn) {
+        case 1:
+          {
+            _score = player1.getScore();
+            player1.setScore(_score - 2);
+//            if (!player1.getIsFoul()) {
+//              player1.setIsFoul(true);
+//            }
+            int foulCount = player1.getFoulCount();
+            player1.setFoulCount(foulCount++);
+            return true;
+          }
+        case 2:
+          {
+            _score = player2.getScore();
+            player2.setScore(_score - 2);
+//            if (!player2.getIsFoul()) {
+//              player2.setIsFoul(true);
+//            }
+            int foulCount = player2.getFoulCount();
+            player2.setFoulCount(foulCount++);
+            return true;
+          }
+      }
     }
+    return false;
   }
 
   bool isGameOver() {
