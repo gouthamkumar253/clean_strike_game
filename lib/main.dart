@@ -1,6 +1,7 @@
 import 'package:clean_strike/views/game_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 void main() => runApp(MyApp());
 
@@ -38,18 +39,17 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Stack(
         children: <Widget>[
           Column(
+            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Expanded(
                 child: Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
+                  child: Opacity(
+                    opacity: 0.95,
+                    child: FadeInImage(
+                      placeholder: MemoryImage(kTransparentImage),
                       image: const AssetImage('assets/carrom.jpg'),
                       fit: BoxFit.cover,
                     ),
-                  ),
-                  child: Opacity(
-                    opacity: 0.95,
-                    child: Container(),
                   ),
                 ),
               ),
@@ -109,7 +109,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     gameType: 1,
                                   ),
                                 ),
-                              ).then(
+                              )
+                                  .then(
                                 (dynamic value) {
                                   setState(
                                     () {
