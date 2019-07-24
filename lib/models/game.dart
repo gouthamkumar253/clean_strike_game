@@ -129,10 +129,13 @@ class Game {
   }
 
   bool _isInfinite() {
-    if (_players[1].getScore() <= -8 && _players[1].getScore() <= -8)
-      return true;
-    else
+    print(_players[0].getScore() + _getAvailablePoints());
+    print(_players[1].getScore() + _getAvailablePoints());
+    if (_players[0].getScore() + _getAvailablePoints() >= 5 ||
+        _players[1].getScore()+_getAvailablePoints() >= 5)
       return false;
+    else
+      return true;
   }
 
   int _incrementFoulCount(int player) {
@@ -142,10 +145,14 @@ class Game {
   int _incrementIdleCount(int player) {
     return _players[player].getIdleCount() + 1;
   }
+  int _getAvailablePoints() {
+    return getBlackCoins() + (getRedCoins() * 3);
+  }
 
   void _setPlayerScore(int score, int player) {
     _players[player].setScore(score);
   }
+
 
   int getBlackCoins() {
     return _blackCoins;
