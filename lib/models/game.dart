@@ -16,77 +16,51 @@ class Game {
   int _currentPlayer;
   List<Player> _players;
 
-  int getBlackCoins() {
-    return _blackCoins;
-  }
-
-  int getRedCoins() {
-    return _redCoin;
-  }
-
-  int getCurrentPlayer() {
-    return _currentPlayer;
-  }
-
-  int getPlayerScore(int player) {
-    return _players[player].getScore();
-  }
-
-  void _setPlayerScore(int score, int player) {
-    _players[player].setScore(score);
-  }
-
   bool _strike() {
     if (_blackCoins > 0) {
       _blackCoins -= 1;
-      final int playerTurn = getCurrentPlayer();
-      _score = getPlayerScore(playerTurn - 1);
-      _setPlayerScore(_score + 1, playerTurn - 1);
-      _players[playerTurn - 1].setIdleCount(0);
+      final int playerTurn = getCurrentPlayer() - 1;
+      _score = getPlayerScore(playerTurn);
+      _setPlayerScore(_score + 1, playerTurn);
+      _players[playerTurn].setIdleCount(0);
       return _changePlayer();
     }
     return false;
   }
 
-  bool _multiStrike() {
-    if (_blackCoins > 1) {
-      _blackCoins -= 2;
-      final int playerTurn = getCurrentPlayer();
-      _score = getPlayerScore(playerTurn - 1);
-      _setPlayerScore(_score + 2, playerTurn - 1);
-      _players[playerTurn - 1].setIdleCount(0);
-      return _changePlayer();
+  bool _multiStrike(int scenario) {
+    print(scenario);
+    if (scenario == 2) {
+      if (_blackCoins >= 1 && _redCoin == 1) {
+        _blackCoins -= 1;
+        _redCoin -= 1;
+        final int playerTurn = getCurrentPlayer() - 1;
+        _score = getPlayerScore(playerTurn);
+        _setPlayerScore(_score + 2, playerTurn);
+        _players[playerTurn].setIdleCount(0);
+        return _changePlayer();
+      }
+      return false;
+    } else {
+      if (_blackCoins > 1) {
+        _blackCoins -= 2;
+        final int playerTurn = getCurrentPlayer() - 1;
+        _score = getPlayerScore(playerTurn);
+        _setPlayerScore(_score + 2, playerTurn);
+        _players[playerTurn].setIdleCount(0);
+        return _changePlayer();
+      }
+      return false;
     }
-    return false;
-
-//    } else if (_blackCoins == 1 && _redCoin == 1) {
-//      _blackCoins = 0;
-//      _redCoin = 0;
-//      switch (playerTurn) {
-//        case 1:
-//          {
-//            _score = player1.getScore();
-//            player1.setScore(_score + 4);
-//            player1.getIsFoul() ? player1.setIsFoul(false) : null;
-//            return true;
-//          }
-//        case 2:
-//          {
-//            _score = player2.getScore();
-//            player2.setScore(_score + 4);
-//            player2.getIsFoul() ? player2.setIsFoul(false) : null;
-//            return true;
-//          }
-//      }
   }
 
   bool _redStrike() {
     if (_redCoin > 0) {
       _redCoin = 0;
       final int playerTurn = getCurrentPlayer();
-      _score = getPlayerScore(playerTurn - 1);
-      _setPlayerScore(_score + 3, playerTurn - 1);
-      _players[playerTurn - 1].setIdleCount(0);
+      _score = getPlayerScore(playerTurn);
+      _setPlayerScore(_score + 3, playerTurn);
+      _players[playerTurn].setIdleCount(0);
 
       return _changePlayer();
     }
@@ -94,60 +68,45 @@ class Game {
   }
 
   bool _strikerStrike() {
-    final int playerTurn = getCurrentPlayer();
-    _score = getPlayerScore(playerTurn - 1);
-    _setPlayerScore(_score - 1, playerTurn - 1);
-    _players[playerTurn - 1]
-        .setFoulCount(_players[playerTurn - 1].getFoulCount() + 1);
+    final int playerTurn = getCurrentPlayer() - 1;
+    _score = getPlayerScore(playerTurn);
+    _setPlayerScore(_score - 1, playerTurn);
+    _players[playerTurn].setFoulCount(_incrementFoulCount(playerTurn));
+    _players[playerTurn].setIdleCount(_incrementIdleCount(playerTurn));
 
     return _changePlayer();
   }
 
-  bool _defunctCoin() {
-    if (_blackCoins > 0) {
-      _blackCoins -= 1;
-      final int playerTurn = getCurrentPlayer();
-      _score = getPlayerScore(playerTurn - 1);
-      _setPlayerScore(_score - 2, playerTurn - 1);
-      _players[playerTurn - 1]
-          .setFoulCount(_players[playerTurn - 1].getFoulCount() + 1);
-      return _changePlayer();
+  bool _defunctCoin(int scenario) {
+    print(scenario);
+    if (scenario == 2) {
+      if (_redCoin == 1) {
+        _redCoin -= 1;
+        final int playerTurn = getCurrentPlayer() - 1;
+        _score = getPlayerScore(playerTurn);
+        _setPlayerScore(_score - 2, playerTurn);
+        _players[playerTurn].setFoulCount(_incrementFoulCount(playerTurn));
+        _players[playerTurn].setIdleCount(_incrementIdleCount(playerTurn));
+        return _changePlayer();
+      }
+      return false;
+    } else {
+      if (_blackCoins >= 1) {
+        _blackCoins -= 1;
+        final int playerTurn = getCurrentPlayer() - 1;
+        _score = getPlayerScore(playerTurn);
+        _setPlayerScore(_score - 2, playerTurn);
+        _players[playerTurn].setFoulCount(_incrementFoulCount(playerTurn));
+        _players[playerTurn].setIdleCount(_incrementIdleCount(playerTurn));
+        return _changePlayer();
+      }
+      return false;
     }
-    return false;
-
-//    else if (_redCoin == 1) {
-//      _redCoin = 0;
-//      switch (playerTurn) {
-//        case 1:
-//          {
-//            _score = player1.getScore();
-//            player1.setScore(_score - 2);
-//            if (!player1.getIsFoul()) {
-//              player1.setIsFoul(true);
-//            }
-//            int foulCount = player1.getFoulCount();
-//            player1.setFoulCount(foulCount++);
-//            return true;
-//          }
-//        case 2:
-//          {
-//            _score = player2.getScore();
-//            player2.setScore(_score - 2);
-//            if (!player2.getIsFoul()) {
-//              player2.setIsFoul(true);
-//            }
-//            int foulCount = player2.getFoulCount();
-//            player2.setFoulCount(foulCount++);
-//            return true;
-//          }
-//      }
-//    }
   }
 
   bool _idlePass() {
-    final int playerTurn = getCurrentPlayer();
-    _players[playerTurn - 1]
-        .setIdleCount(_players[playerTurn - 1].getIdleCount() + 1);
+    final int playerTurn = getCurrentPlayer() - 1;
+    _players[playerTurn].setIdleCount(_incrementIdleCount(playerTurn));
     _changePlayer();
     return true;
   }
@@ -170,9 +129,35 @@ class Game {
     return false;
   }
 
+  int _incrementFoulCount(int player) {
+    return _players[player].getFoulCount() + 1;
+  }
 
+  int _incrementIdleCount(int player) {
+    return _players[player].getIdleCount() + 1;
+  }
 
-  int didWin() {
+  void _setPlayerScore(int score, int player) {
+    _players[player].setScore(score);
+  }
+
+  int getBlackCoins() {
+    return _blackCoins;
+  }
+
+  int getRedCoins() {
+    return _redCoin;
+  }
+
+  int getCurrentPlayer() {
+    return _currentPlayer;
+  }
+
+  int getPlayerScore(int player) {
+    return _players[player].getScore();
+  }
+
+  int gameWinner() {
     final bool endGame = _blackCoins == 0 && _redCoin == 0;
 
     final int player1score = _players[0].getScore();
@@ -225,7 +210,7 @@ class Game {
     return false;
   }
 
-  bool actions(int action) {
+  bool actions(int action, {int scenario = 0}) {
     switch (action) {
       case 1:
         {
@@ -233,7 +218,7 @@ class Game {
         }
       case 2:
         {
-          return _multiStrike();
+          return _multiStrike(scenario);
         }
       case 3:
         {
@@ -245,7 +230,7 @@ class Game {
         }
       case 5:
         {
-          return _defunctCoin();
+          return _defunctCoin(scenario);
         }
       case 6:
         {
