@@ -5,6 +5,7 @@ class Game {
     _blackCoins = 9;
     _redCoin = 1;
     _currentPlayer = 1;
+    _score=0;
     _players = <Player>[];
     _players.add(Player());
     _players.add(Player());
@@ -29,10 +30,10 @@ class Game {
   }
 
   bool _multiStrike(int scenario) {
-    print(scenario);
     if (scenario == 2) {
       if (_blackCoins >= 1 && _redCoin == 1) {
         _redCoin -= 1;
+        _blackCoins-=1;
         final int playerTurn = getCurrentPlayer() - 1;
         _score = getPlayerScore(playerTurn);
         _setPlayerScore(_score + 3, playerTurn);
@@ -132,7 +133,7 @@ class Game {
     print(_players[0].getScore() + _getAvailablePoints());
     print(_players[1].getScore() + _getAvailablePoints());
     if (_players[0].getScore() + _getAvailablePoints() >= 5 ||
-        _players[1].getScore()+_getAvailablePoints() >= 5)
+        _players[1].getScore() + _getAvailablePoints() >= 5)
       return false;
     else
       return true;
@@ -145,14 +146,25 @@ class Game {
   int _incrementIdleCount(int player) {
     return _players[player].getIdleCount() + 1;
   }
+
   int _getAvailablePoints() {
     return getBlackCoins() + (getRedCoins() * 3);
   }
+
 
   void _setPlayerScore(int score, int player) {
     _players[player].setScore(score);
   }
 
+  //Testing purpose Function
+  void setRedCoins(int count) {
+    _redCoin = count;
+  }
+
+  //Testing purpose Function
+  void setBlackCoins(int count) {
+    _blackCoins = count;
+  }
 
   int getBlackCoins() {
     return _blackCoins;
