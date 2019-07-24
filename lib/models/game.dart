@@ -54,9 +54,9 @@ class Game {
   }
 
   bool _redStrike() {
-    if (_redCoin > 0) {
+    if (_redCoin == 1) {
       _redCoin = 0;
-      final int playerTurn = getCurrentPlayer();
+      final int playerTurn = getCurrentPlayer() - 1;
       _score = getPlayerScore(playerTurn);
       _setPlayerScore(_score + 3, playerTurn);
       _players[playerTurn].setIdleCount(0);
@@ -128,8 +128,8 @@ class Game {
     return false;
   }
 
-  bool _isInfinite(){
-    if(_players[1].getScore()<=-8&&_players[1].getScore()<=-8)
+  bool _isInfinite() {
+    if (_players[1].getScore() <= -8 && _players[1].getScore() <= -8)
       return true;
     else
       return false;
@@ -168,12 +168,10 @@ class Game {
 
     final int player1score = _players[0].getScore();
     final int player2score = _players[1].getScore();
-    if(_isInfinite())
-      {
-        return 0;
-      }
-    else
-      {    if (player1score > player2score) {
+    if (_isInfinite()) {
+      return 0;
+    } else {
+      if (player1score > player2score) {
         if (player1score - player2score >= 3 && player1score >= 5) {
           print('Player 1 Wins');
           return 1;
@@ -193,8 +191,8 @@ class Game {
           else
             return -1;
         }
-      }}
-
+      }
+    }
   }
 
   bool isFoul(int currentPlayer) {
@@ -221,9 +219,6 @@ class Game {
     }
     return false;
   }
-
-
-  
 
   bool actions(int action, {int scenario = 0}) {
     switch (action) {

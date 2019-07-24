@@ -13,12 +13,12 @@ class CleanStrike extends StatefulWidget {
 }
 
 class _CleanStrikeState extends State<CleanStrike> {
-  int currentPlayer = 1;
-  int winner;
-  bool actionSuccess = false;
-  Game gameObject = Game();
+  int _currentPlayer = 1;
+  int _winner;
+  bool _actionSuccess = false;
+  final Game _gameObject = Game();
 
-  void showToast(String toastMessage) {
+  void _showToast(String toastMessage) {
     Toast.show(
       toastMessage,
       context,
@@ -30,23 +30,21 @@ class _CleanStrikeState extends State<CleanStrike> {
     );
   }
 
-  void performAction(int action, {int scenario = 0}) {
-    currentPlayer = gameObject.getCurrentPlayer();
+  void _performAction(int action, {int scenario = 0}) {
+    _currentPlayer = _gameObject.getCurrentPlayer();
     if (action == 2 || action == 5)
-      actionSuccess = gameObject.actions(action, scenario: scenario);
+      _actionSuccess = _gameObject.actions(action, scenario: scenario);
     else
-      actionSuccess = gameObject.actions(action);
+      _actionSuccess = _gameObject.actions(action);
 
-    winner = gameObject.gameWinner();
-    predictWinner(winner);
+    _winner = _gameObject.gameWinner();
+    _predictWinner(_winner);
   }
 
   void _showDialog(int action) {
-    // flutter defined function
     showDialog<AlertDialog>(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
         return AlertDialog(
           title: const Text('Choose Scenario'),
           content: Row(
@@ -54,18 +52,20 @@ class _CleanStrikeState extends State<CleanStrike> {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  setState(() {
-                    performAction(action, scenario: 1);
+                  setState(
+                    () {
+                      _performAction(action, scenario: 1);
 
-                    if (actionSuccess)
-                      action == 2
-                          ? showToast(
-                              'Player $currentPlayer pockets 2 black coins')
-                          : showToast(
-                              'Player $currentPlayer throws a black coin out of board');
-                    else
-                      showToast('Invalid Move.No sufficient black boins');
-                  });
+                      if (_actionSuccess)
+                        action == 2
+                            ? _showToast(
+                                'Player $_currentPlayer pockets 2 black coins')
+                            : _showToast(
+                                'Player $_currentPlayer throws a black coin out of board');
+                      else
+                        _showToast('Invalid Move.No sufficient black coins');
+                    },
+                  );
                   Navigator.of(context).pop();
                 },
                 child: Container(
@@ -89,15 +89,17 @@ class _CleanStrikeState extends State<CleanStrike> {
               ),
               InkWell(
                 onTap: () {
-                  setState(() {
-                    performAction(action, scenario: 2);
+                  setState(
+                    () {
+                      _performAction(action, scenario: 2);
 
-                    if (actionSuccess)
-                      showToast(
-                          'Player $currentPlayer pockets a black coin and a red coin\nBlack coin is returned to the board.');
-                    else
-                      showToast('Invalid Move');
-                  });
+                      if (_actionSuccess)
+                        _showToast(
+                            'Player $_currentPlayer pockets a black coin and a red coin\nBlack coin is returned to the board.');
+                      else
+                        _showToast('Invalid Move');
+                    },
+                  );
                   Navigator.of(context).pop();
                 },
                 child: Container(
@@ -106,11 +108,13 @@ class _CleanStrikeState extends State<CleanStrike> {
                   decoration: BoxDecoration(
                     gradient: action == 2
                         ? LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                             colors: <Color>[
                               Colors.black,
                               Colors.red,
                             ],
-                            stops: const <double>[0.25, 1],
+                            stops: const <double>[0.5, 0.5],
                           )
                         : LinearGradient(
                             colors: <Color>[Colors.red, Colors.redAccent],
@@ -133,14 +137,14 @@ class _CleanStrikeState extends State<CleanStrike> {
     );
   }
 
-  void predictWinner(int winner) {
-    if (winner >= 0) {
+  void _predictWinner(int _winner) {
+    if (_winner >= 0) {
       Navigator.of(context).push(
         PageRouteBuilder<Widget>(
           opaque: false,
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondary) =>
-              GameOver(winner: winner),
+              GameOver(winner: _winner),
           transitionDuration: Duration(seconds: 1),
           transitionsBuilder: (BuildContext context, Animation<double> anim,
                   Animation<double> secondaryAnim, Widget child) =>
@@ -212,7 +216,7 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    gameObject.getBlackCoins().toString(),
+                                    _gameObject.getBlackCoins().toString(),
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 30,
@@ -238,7 +242,7 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    gameObject.getRedCoins().toString(),
+                                    _gameObject.getRedCoins().toString(),
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 30,
@@ -272,7 +276,7 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    gameObject.getPlayerScore(0).toString(),
+                                    _gameObject.getPlayerScore(0).toString(),
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 50,
@@ -308,7 +312,7 @@ class _CleanStrikeState extends State<CleanStrike> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  gameObject.getPlayerScore(1).toString(),
+                                  _gameObject.getPlayerScore(1).toString(),
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 50,
@@ -340,12 +344,12 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         onPressed: () {
                                           setState(
                                             () {
-                                              performAction(1);
-                                              if (actionSuccess)
-                                                showToast(
-                                                    'Player $currentPlayer pockets a black coin');
+                                              _performAction(1);
+                                              if (_actionSuccess)
+                                                _showToast(
+                                                    'Player $_currentPlayer pockets a black coin');
                                               else
-                                                showToast(
+                                                _showToast(
                                                     'Invalid Move.No more black coins');
                                             },
                                           );
@@ -354,7 +358,8 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         child: Text(
                                           '1',
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: 32),
+                                              color: Colors.white,
+                                              fontSize: 32),
                                         ),
                                       ),
                                       Text(
@@ -372,18 +377,18 @@ class _CleanStrikeState extends State<CleanStrike> {
                                     children: <Widget>[
                                       RaisedButton(
                                         onPressed: () {
-                                          if (gameObject.getRedCoins() == 1 &&
-                                              gameObject.getBlackCoins() != 0)
+                                          if (_gameObject.getRedCoins() == 1 &&
+                                              _gameObject.getBlackCoins() != 0)
                                             _showDialog(2);
                                           else
                                             setState(() {
-                                              performAction(2, scenario: 1);
+                                              _performAction(2, scenario: 1);
 
-                                              if (actionSuccess)
-                                                showToast(
-                                                    'Player $currentPlayer pockets 2 black coins');
+                                              if (_actionSuccess)
+                                                _showToast(
+                                                    'Player $_currentPlayer pockets 2 black coins');
                                               else
-                                                showToast(
+                                                _showToast(
                                                     'Invalid Move.No sufficient black boins');
                                             });
                                         },
@@ -391,7 +396,8 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         child: Text(
                                           '2',
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: 32),
+                                              color: Colors.white,
+                                              fontSize: 32),
                                         ),
                                       ),
                                       Text(
@@ -411,13 +417,13 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         onPressed: () {
                                           setState(
                                             () {
-                                              performAction(3);
+                                              _performAction(3);
 
-                                              if (actionSuccess)
-                                                showToast(
-                                                    'Player $currentPlayer pockets a red coin');
+                                              if (_actionSuccess)
+                                                _showToast(
+                                                    'Player $_currentPlayer pockets a red coin');
                                               else
-                                                showToast(
+                                                _showToast(
                                                     'Invalid Move.No more red coins');
                                             },
                                           );
@@ -426,7 +432,8 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         child: Text(
                                           '3',
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: 32),
+                                              color: Colors.white,
+                                              fontSize: 32),
                                         ),
                                       ),
                                       Text(
@@ -451,15 +458,15 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         onPressed: () {
                                           setState(
                                             () {
-                                              performAction(4);
+                                              _performAction(4);
 
-                                              if (gameObject
-                                                  .isFoul(currentPlayer))
-                                                showToast(
-                                                    'Player $currentPlayer pockets the striker coin.You will lose an additional point since you have 3 fouls');
+                                              if (_gameObject
+                                                  .isFoul(_currentPlayer))
+                                                _showToast(
+                                                    'Player $_currentPlayer pockets the striker coin.You will lose an additional point since you have 3 fouls');
                                               else
-                                                showToast(
-                                                    'Player $currentPlayer pockets the striker');
+                                                _showToast(
+                                                    'Player $_currentPlayer pockets the striker');
                                             },
                                           );
                                         },
@@ -467,7 +474,8 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         child: Text(
                                           '4',
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: 32),
+                                              color: Colors.white,
+                                              fontSize: 32),
                                         ),
                                       ),
                                       Text(
@@ -485,31 +493,32 @@ class _CleanStrikeState extends State<CleanStrike> {
                                     children: <Widget>[
                                       RaisedButton(
                                         onPressed: () {
-                                          if (gameObject.getRedCoins() != 0 &&
-                                              gameObject.getBlackCoins() != 0)
+                                          if (_gameObject.getRedCoins() != 0 &&
+                                              _gameObject.getBlackCoins() != 0)
                                             _showDialog(5);
-                                          else if (gameObject.getRedCoins() == 0)
+                                          else if (_gameObject.getRedCoins() ==
+                                              0)
                                             setState(
                                               () {
-                                                performAction(5, scenario: 1);
+                                                _performAction(5, scenario: 1);
 
-                                                if (actionSuccess)
-                                                  showToast(
-                                                      'Player $currentPlayer pockets 2 black coins');
+                                                if (_actionSuccess)
+                                                  _showToast(
+                                                      'Player $_currentPlayer pockets 2 black coins');
                                                 else
-                                                  showToast(
+                                                  _showToast(
                                                       'Invalid Move.No sufficient black boins');
                                               },
                                             );
                                           else {
                                             setState(() {
-                                              performAction(2, scenario: 2);
+                                              _performAction(2, scenario: 2);
 
-                                              if (actionSuccess)
-                                                showToast(
-                                                    'Player $currentPlayer pockets 2 black coins');
+                                              if (_actionSuccess)
+                                                _showToast(
+                                                    'Player $_currentPlayer pockets 2 black coins');
                                               else
-                                                showToast(
+                                                _showToast(
                                                     'Invalid Move.No sufficient black boins');
                                             });
                                           }
@@ -518,7 +527,8 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         child: Text(
                                           '5',
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: 32),
+                                              color: Colors.white,
+                                              fontSize: 32),
                                         ),
                                       ),
                                       Text(
@@ -538,15 +548,15 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         onPressed: () {
                                           setState(
                                             () {
-                                              performAction(6);
+                                              _performAction(6);
 
-                                              if (gameObject
-                                                  .isIdle(currentPlayer))
-                                                showToast(
-                                                    'Player $currentPlayer makes an idle pass. You will lose an additional point since you haven\'t pocketed a coin for 3 successive turns');
+                                              if (_gameObject
+                                                  .isIdle(_currentPlayer))
+                                                _showToast(
+                                                    'Player $_currentPlayer makes an idle pass. You will lose an additional point since you haven\'t pocketed a coin for 3 successive turns');
                                               else
-                                                showToast(
-                                                    'Player $currentPlayer makes an idle pass');
+                                                _showToast(
+                                                    'Player $_currentPlayer makes an idle pass');
                                             },
                                           );
                                         },
@@ -554,7 +564,8 @@ class _CleanStrikeState extends State<CleanStrike> {
                                         child: Text(
                                           '6',
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: 32),
+                                              color: Colors.white,
+                                              fontSize: 32),
                                         ),
                                       ),
                                       Text(
@@ -586,7 +597,7 @@ class _CleanStrikeState extends State<CleanStrike> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            'Player ${gameObject.getCurrentPlayer()}\'s Turn',
+                            'Player ${_gameObject.getCurrentPlayer()}\'s Turn',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
