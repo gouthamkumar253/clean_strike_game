@@ -164,9 +164,8 @@ class _CleanStrikeState extends State<CleanStrike> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Clean Strike',
-          style: TextStyle(fontSize: 32),
         ),
       ),
       body: ListView(
@@ -178,24 +177,27 @@ class _CleanStrikeState extends State<CleanStrike> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Expanded(
+                    child: Center(
+                      child: Card(
+                        elevation: 2,
+                        color: Colors.blue,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
                           child: Text(
-                            'Let\'s Play!!!',
+                            'Player ${_gameObject.getCurrentPlayer()}\'s Turn',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 60,
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   const SizedBox(
-                    height: 50,
+                    height: 25,
                   ),
                   Container(
                     child: Row(
@@ -326,7 +328,7 @@ class _CleanStrikeState extends State<CleanStrike> {
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 25,
                   ),
                   Container(
                     child: Column(
@@ -338,112 +340,90 @@ class _CleanStrikeState extends State<CleanStrike> {
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      RaisedButton(
-                                        onPressed: () {
-                                          setState(
-                                            () {
-                                              _performAction(1);
-                                              if (_actionSuccess)
-                                                _showToast(
-                                                    'Player $_currentPlayer pockets a black coin');
-                                              else
-                                                _showToast(
-                                                    'Invalid Move.No more black coins');
-                                            },
-                                          );
-                                        },
-                                        color: Colors.blue,
-                                        child: Text(
-                                          '1',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 32),
-                                        ),
-                                      ),
-                                      Text(
-                                        'Strike',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      RaisedButton(
-                                        onPressed: () {
-                                          if (_gameObject.getRedCoins() == 1 &&
-                                              _gameObject.getBlackCoins() != 0)
-                                            _showDialog(2);
+                                  child: RaisedButton(
+                                    onPressed: () {
+                                      setState(
+                                        () {
+                                          _performAction(1);
+                                          if (_actionSuccess)
+                                            _showToast(
+                                                'Player $_currentPlayer pockets a black coin');
                                           else
-                                            setState(() {
-                                              _performAction(2, scenario: 1);
-
-                                              if (_actionSuccess)
-                                                _showToast(
-                                                    'Player $_currentPlayer pockets 2 black coins');
-                                              else
-                                                _showToast(
-                                                    'Invalid Move.No sufficient black boins');
-                                            });
+                                            _showToast(
+                                                'Invalid Move.No more black coins');
                                         },
-                                        color: Colors.blue,
-                                        child: Text(
-                                          '2',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 32),
-                                        ),
+                                      );
+                                    },
+                                    color: Colors.blue,
+                                    child: Text(
+                                      'Strike',
+                                      textAlign: TextAlign.center,
+
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
                                       ),
-                                      Text(
-                                        'Multi Strike',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
+                                const SizedBox(
+                                  width: 15,
+                                ),
                                 Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      RaisedButton(
-                                        onPressed: () {
-                                          setState(
-                                            () {
-                                              _performAction(3);
+                                  child: RaisedButton(
+                                    onPressed: () {
+                                      if (_gameObject.getRedCoins() == 1 &&
+                                          _gameObject.getBlackCoins() != 0)
+                                        _showDialog(2);
+                                      else
+                                        setState(() {
+                                          _performAction(2, scenario: 1);
 
-                                              if (_actionSuccess)
-                                                _showToast(
-                                                    'Player $_currentPlayer pockets a red coin');
-                                              else
-                                                _showToast(
-                                                    'Invalid Move.No more red coins');
-                                            },
-                                          );
+                                          if (_actionSuccess)
+                                            _showToast(
+                                                'Player $_currentPlayer pockets 2 black coins');
+                                          else
+                                            _showToast(
+                                                'Invalid Move.No sufficient black boins');
+                                        });
+                                    },
+                                    color: Colors.blue,
+                                    child: Text(
+                                      'Multi Strike',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 15,
+                                ),
+                                Expanded(
+                                  child: RaisedButton(
+                                    onPressed: () {
+                                      setState(
+                                        () {
+                                          _performAction(3);
+
+                                          if (_actionSuccess)
+                                            _showToast(
+                                                'Player $_currentPlayer pockets a red coin');
+                                          else
+                                            _showToast(
+                                                'Invalid Move.No more red coins');
                                         },
-                                        color: Colors.blue,
-                                        child: Text(
-                                          '3',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 32),
-                                        ),
-                                      ),
-                                      Text(
-                                        'Red Strike',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                      );
+                                    },
+                                    color: Colors.blue,
+                                    child: Text(
+                                      'Red Strike',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -452,130 +432,108 @@ class _CleanStrikeState extends State<CleanStrike> {
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      RaisedButton(
-                                        onPressed: () {
-                                          setState(
-                                            () {
-                                              _performAction(4);
+                                  child: RaisedButton(
+                                    onPressed: () {
+                                      setState(
+                                        () {
+                                          _performAction(4);
 
-                                              if (_gameObject
-                                                  .isFoul(_currentPlayer))
-                                                _showToast(
-                                                    'Player $_currentPlayer pockets the striker coin.You will lose an additional point since you have 3 fouls');
-                                              else
-                                                _showToast(
-                                                    'Player $_currentPlayer pockets the striker');
-                                            },
-                                          );
+                                          if (_gameObject
+                                              .isFoul(_currentPlayer))
+                                            _showToast(
+                                                'Player $_currentPlayer pockets the striker coin.You will lose an additional point since you have 3 fouls');
+                                          else
+                                            _showToast(
+                                                'Player $_currentPlayer pockets the striker');
                                         },
-                                        color: Colors.blue,
-                                        child: Text(
-                                          '4',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 32),
-                                        ),
-                                      ),
-                                      Text(
-                                        'Striker Strike',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                      );
+                                    },
+                                    color: Colors.blue,
+                                    child: Text(
+                                      'Striker Strike',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15),
+                                    ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      RaisedButton(
-                                        onPressed: () {
-                                          if (_gameObject.getRedCoins() != 0 &&
-                                              _gameObject.getBlackCoins() != 0)
-                                            _showDialog(5);
-                                          else if (_gameObject.getRedCoins() ==
-                                              0)
-                                            setState(
-                                              () {
-                                                _performAction(5, scenario: 1);
-
-                                                if (_actionSuccess)
-                                                  _showToast(
-                                                      'Player $_currentPlayer pockets 2 black coins');
-                                                else
-                                                  _showToast(
-                                                      'Invalid Move.No sufficient black boins');
-                                              },
-                                            );
-                                          else {
-                                            setState(() {
-                                              _performAction(2, scenario: 2);
-
-                                              if (_actionSuccess)
-                                                _showToast(
-                                                    'Player $_currentPlayer pockets 2 black coins');
-                                              else
-                                                _showToast(
-                                                    'Invalid Move.No sufficient black boins');
-                                            });
-                                          }
-                                        },
-                                        color: Colors.blue,
-                                        child: Text(
-                                          '5',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 32),
-                                        ),
-                                      ),
-                                      Text(
-                                        'Defunct Coin',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
+                                const SizedBox(
+                                  width: 15,
                                 ),
                                 Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      RaisedButton(
-                                        onPressed: () {
-                                          setState(
-                                            () {
-                                              _performAction(6);
+                                  child: RaisedButton(
+                                    onPressed: () {
+                                      if (_gameObject.getRedCoins() != 0 &&
+                                          _gameObject.getBlackCoins() != 0)
+                                        _showDialog(5);
+                                      else if (_gameObject.getRedCoins() ==
+                                          0)
+                                        setState(
+                                          () {
+                                            _performAction(5, scenario: 1);
 
-                                              if (_gameObject
-                                                  .isIdle(_currentPlayer))
-                                                _showToast(
-                                                    'Player $_currentPlayer makes an idle pass. You will lose an additional point since you haven\'t pocketed a coin for 3 successive turns');
-                                              else
-                                                _showToast(
-                                                    'Player $_currentPlayer makes an idle pass');
-                                            },
-                                          );
+                                            if (_actionSuccess)
+                                              _showToast(
+                                                  'Player $_currentPlayer pockets 2 black coins');
+                                            else
+                                              _showToast(
+                                                  'Invalid Move.No sufficient black boins');
+                                          },
+                                        );
+                                      else {
+                                        setState(() {
+                                          _performAction(2, scenario: 2);
+
+                                          if (_actionSuccess)
+                                            _showToast(
+                                                'Player $_currentPlayer pockets 2 black coins');
+                                          else
+                                            _showToast(
+                                                'Invalid Move.No sufficient black boins');
+                                        });
+                                      }
+                                    },
+                                    color: Colors.blue,
+                                    child: Text(
+                                      'Defunct Coin',
+                                      textAlign: TextAlign.center,
+
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 15,
+                                ),
+                                Expanded(
+                                  child: RaisedButton(
+                                    onPressed: () {
+                                      setState(
+                                        () {
+                                          _performAction(6);
+
+                                          if (_gameObject
+                                              .isIdle(_currentPlayer))
+                                            _showToast(
+                                                'Player $_currentPlayer makes an idle pass. You will lose an additional point since you haven\'t pocketed a coin for 3 successive turns');
+                                          else
+                                            _showToast(
+                                                'Player $_currentPlayer makes an idle pass');
                                         },
-                                        color: Colors.blue,
-                                        child: Text(
-                                          '6',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 32),
-                                        ),
-                                      ),
-                                      Text(
-                                        'None',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                      );
+                                    },
+                                    color: Colors.blue,
+                                    child: Text(
+                                      'Miss',
+                                      textAlign: TextAlign.center,
+
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -586,28 +544,7 @@ class _CleanStrikeState extends State<CleanStrike> {
                     ),
                   ),
                   const SizedBox(
-                    height: 30,
-                  ),
-                  Card(
-                    elevation: 2,
-                    color: Colors.blue,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            'Player ${_gameObject.getCurrentPlayer()}\'s Turn',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    height: 25,
                   ),
                 ],
               ),

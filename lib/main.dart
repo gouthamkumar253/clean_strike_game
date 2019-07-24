@@ -30,10 +30,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool tapped1 = false;
-  bool tapped2 = false;
-
-
+  bool _tapped1 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -52,18 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   child: Opacity(
                     opacity: 0.95,
-                    child: Container(
-//                      decoration: const BoxDecoration(
-//                        gradient: LinearGradient(
-//                          begin: Alignment.topLeft,
-//                          end: Alignment.bottomRight,
-//                          colors: const <Color>[
-//                            Color(0xFF0084E9),
-//                            Color(0xFF7BCDC8),
-//                          ],
-//                        ),
-//                      ),
-                        ),
+                    child: Container(),
                   ),
                 ),
               ),
@@ -74,106 +60,69 @@ class _MyHomePageState extends State<MyHomePage> {
               Expanded(
                 child: Container(
                   child: Center(
-                      child: Text(
-                    'Clean Strike',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white,fontWeight:FontWeight.bold,fontSize: 100),
-                  ),),
+                    child: Text(
+                      'Clean Strike',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 100),
+                    ),
+                  ),
                 ),
               ),
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(40.0),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: FlatButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  'Manual',
-                                  style: TextStyle(
-                                    color:
-                                        tapped1 ? Colors.blue : Colors.white,
-                                    fontSize: 18.0,
-                                    fontFamily: 'ProximaNovaSemiBold',
-                                  ),
+              Expanded(
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(40.0),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: FlatButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                'Start Game',
+                                style: TextStyle(
+                                  color: _tapped1 ? Colors.blue : Colors.white,
+                                  fontSize: 18.0,
                                 ),
                               ),
-                              color: tapped1
-                                  ? Colors.white
-                                  : Colors.black.withOpacity(0.25),
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    tapped1 = true;
-                                    tapped2 = false;
-                                  },
-                                );
-                                Navigator.of(context).push(
-                                  CupertinoPageRoute<Widget>(
-                                    builder: (BuildContext context) =>
-                                        const CleanStrike(
-                                      gameType: 1,
-                                    ),
-                                  ),
-                                );
-                              },
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: FlatButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  'Automatic',
-                                  style: TextStyle(
-                                    color:
-                                        tapped2 ? Colors.blue : Colors.white,
-                                    fontSize: 18.0,
-                                    fontFamily: 'ProximaNovaSemiBold',
+                            color: _tapped1
+                                ? Colors.white
+                                : Colors.black.withOpacity(0.25),
+                            onPressed: () {
+                              setState(
+                                () {
+                                  _tapped1 = true;
+                                },
+                              );
+                              Navigator.of(context)
+                                  .push(
+                                CupertinoPageRoute<Widget>(
+                                  builder: (BuildContext context) =>
+                                      const CleanStrike(
+                                    gameType: 1,
                                   ),
                                 ),
-                              ),
-                              color: tapped2
-                                  ? Colors.white
-                                  : Colors.black.withOpacity(0.25),
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    tapped2 = true;
-                                    tapped1 = false;
-                                  },
-                                );
-                                Navigator.of(context).push(
-                                  CupertinoPageRoute<Widget>(
-                                    builder: (BuildContext context) =>
-                                        const CleanStrike(
-                                      gameType: 2,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                              ).then(
+                                (dynamic value) {
+                                  setState(
+                                    () {
+                                      _tapped1 = false;
+                                    },
+                                  );
+                                },
+                              );
+                            },
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
