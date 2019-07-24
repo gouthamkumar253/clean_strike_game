@@ -32,11 +32,10 @@ class Game {
     print(scenario);
     if (scenario == 2) {
       if (_blackCoins >= 1 && _redCoin == 1) {
-        _blackCoins -= 1;
         _redCoin -= 1;
         final int playerTurn = getCurrentPlayer() - 1;
         _score = getPlayerScore(playerTurn);
-        _setPlayerScore(_score + 2, playerTurn);
+        _setPlayerScore(_score + 3, playerTurn);
         _players[playerTurn].setIdleCount(0);
         return _changePlayer();
       }
@@ -129,6 +128,13 @@ class Game {
     return false;
   }
 
+  bool _isInfinite(){
+    if(_players[1].getScore()<=-8&&_players[1].getScore()<=-8)
+      return true;
+    else
+      return false;
+  }
+
   int _incrementFoulCount(int player) {
     return _players[player].getFoulCount() + 1;
   }
@@ -162,27 +168,33 @@ class Game {
 
     final int player1score = _players[0].getScore();
     final int player2score = _players[1].getScore();
-    if (player1score > player2score) {
-      if (player1score - player2score >= 3 && player1score >= 5) {
-        print('Player 1 Wins');
-        return 1;
-      } else {
-        if (endGame)
-          return 0;
-        else
-          return -1;
+    if(_isInfinite())
+      {
+        return 0;
       }
-    } else if (player2score >= player1score) {
-      if (player2score - player1score >= 3 && player2score >= 5) {
-        print('Player 2 wins');
-        return 2;
-      } else {
-        if (endGame)
-          return 0;
-        else
-          return -1;
-      }
-    }
+    else
+      {    if (player1score > player2score) {
+        if (player1score - player2score >= 3 && player1score >= 5) {
+          print('Player 1 Wins');
+          return 1;
+        } else {
+          if (endGame)
+            return 0;
+          else
+            return -1;
+        }
+      } else if (player2score >= player1score) {
+        if (player2score - player1score >= 3 && player2score >= 5) {
+          print('Player 2 wins');
+          return 2;
+        } else {
+          if (endGame)
+            return 0;
+          else
+            return -1;
+        }
+      }}
+
   }
 
   bool isFoul(int currentPlayer) {
@@ -209,6 +221,9 @@ class Game {
     }
     return false;
   }
+
+
+  
 
   bool actions(int action, {int scenario = 0}) {
     switch (action) {
