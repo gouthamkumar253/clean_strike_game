@@ -33,7 +33,6 @@ class Game {
     if (scenario == 2) {
       if (_blackCoins >= 1 && _redCoin == 1) {
         _redCoin -= 1;
-        _blackCoins-=1;
         final int playerTurn = getCurrentPlayer() - 1;
         _score = getPlayerScore(playerTurn);
         _setPlayerScore(_score + 3, playerTurn);
