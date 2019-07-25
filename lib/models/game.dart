@@ -81,7 +81,7 @@ class Game {
     print(scenario);
     if (scenario == 2) {
       if (_redCoin == 1) {
-        _redCoin -= 1;
+        _redCoin = 0;
         final int playerTurn = getCurrentPlayer() - 1;
         _score = getPlayerScore(playerTurn);
         _setPlayerScore(_score - 2, playerTurn);

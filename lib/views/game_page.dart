@@ -375,19 +375,33 @@ class _CleanStrikeState extends State<CleanStrike> {
                                   child: RaisedButton(
                                     onPressed: () {
                                       if (_gameObject.getRedCoins() == 1 &&
-                                          _gameObject.getBlackCoins() != 0)
+                                          _gameObject.getBlackCoins() > 1)
                                         _showDialog(2);
-                                      else
-                                        setState(() {
-                                          _performAction(2, scenario: 1);
+                                      else if(_gameObject.getRedCoins()==1&&_gameObject.getBlackCoins()==1)
+                                        {
+                                          setState(() {
+                                            _performAction(2, scenario: 2);
 
-                                          if (_actionSuccess)
-                                            _showToast(
-                                                'Player $_currentPlayer pockets 2 black coins');
-                                          else
-                                            _showToast(
-                                                'Invalid Move.No sufficient black boins');
-                                        });
+                                            if (_actionSuccess)
+                                              _showToast(
+                                                  'Player $_currentPlayer pockets a black coin and a red coin\nBlack coin is returned to the board.');
+                                            else
+                                              _showToast(
+                                                  'Invalid Move.No sufficient black coins');
+                                          });
+                                        }
+                                      else{
+                                        setState(() {
+                                        _performAction(2, scenario: 1);
+
+                                        if (_actionSuccess)
+                                          _showToast(
+                                              'Player $_currentPlayer pockets 2 black coins');
+                                        else
+                                          _showToast(
+                                              'Invalid Move.No sufficient black coins');
+                                      });}
+
                                     },
                                     color: Colors.blue,
                                     child: Text(
@@ -477,10 +491,10 @@ class _CleanStrikeState extends State<CleanStrike> {
 
                                             if (_actionSuccess)
                                               _showToast(
-                                                  'Player $_currentPlayer pockets 2 black coins');
+                                                  'Player $_currentPlayer throws a black coin out of board');
                                             else
                                               _showToast(
-                                                  'Invalid Move.No sufficient black boins');
+                                                  'Invalid Move.No sufficient black coins');
                                           },
                                         );
                                       else {
@@ -489,10 +503,10 @@ class _CleanStrikeState extends State<CleanStrike> {
 
                                           if (_actionSuccess)
                                             _showToast(
-                                                'Player $_currentPlayer pockets 2 black coins');
+                                                'Player $_currentPlayer throws a red coin out of board');
                                           else
                                             _showToast(
-                                                'Invalid Move.No sufficient black boins');
+                                                'Invalid Move.No sufficient coins');
                                         });
                                       }
                                     },
