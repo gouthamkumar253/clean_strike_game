@@ -94,10 +94,12 @@ class _CleanStrikeState extends State<CleanStrike> {
                       _performAction(action, scenario: 2);
 
                       if (_actionSuccess)
-                        _showToast(
-                            'Player $_currentPlayer pockets a black coin and a red coin\nBlack coin is returned to the board.');
+                        action == 2
+                            ?_showToast(
+                            'Player $_currentPlayer pockets a black coin and a red coin\nBlack coin is returned to the board.'):
+                      _showToast('Player $_currentPlayer throws the red coin out of board');
                       else
-                        _showToast('Invalid Move');
+                        _showToast('Invalid Move.No sufficient coins');
                     },
                   );
                   Navigator.of(context).pop();
